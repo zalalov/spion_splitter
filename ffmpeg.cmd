@@ -1,0 +1,1 @@
+ffmpeg -i ~/projects/spion_splitter/247.mp4 -ss 30 -strict -2 -t 5.1 output_clip.mp4
