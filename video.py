@@ -91,8 +91,7 @@ class SpionRecord:
             curr_msec = self.cap.get(cv2.CAP_PROP_POS_MSEC)
 
             if not ret:
-
-
+                # TODO: handle finished clip
                 break
 
             curr_is_del = delimiter.check(frame)
@@ -142,19 +141,6 @@ class SpionRecord:
         :param duration: duration in seconds
         :param output_name: name of output file
         """
-        print(' '.join([
-            'ffmpeg',
-            '-i',
-            self.path,
-            '-ss',
-            str(ms_start / 1000),
-            '-strict',
-            '-2',
-            '-t',
-            str(duration / 1000),
-            output_path
-        ]))
-
         subprocess.call([
             'ffmpeg',
             '-i',
