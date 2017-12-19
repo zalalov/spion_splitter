@@ -19,10 +19,12 @@ class SpionRecord:
         Enter context manager function
         :return:
         """
-        if not path.exists(self.video_path):
-            raise Exception('Video not exists: {}'.format(self.video_path))
+        if not path.exists(self.path):
+            raise Exception('Video not exists: {}'.format(self.path))
 
-        self.cap = cv2.VideoCapture(self.video_path)
+        self.cap = cv2.VideoCapture(self.path)
+
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """
@@ -52,13 +54,46 @@ class SpionRecord:
 
         delimiter.adjust_size(self.shape())
 
-        # TODO: return lists of milliseconds
-        # while True:
-        #     ret, frame = self.cap.read()
-        #
-        #     print(self.cap.get(cv2.CAP_PROP_POS_MSEC))
-        #
-        #     if not ret:
-        #         break
+        skip = False
+        prev_msec = 0
+        curr_msec = 0
+        timeline = []
+        prev_is_del = False
+        curr_is_del = False
+        period = [0, 0]
 
-        return []
+        while True:
+            ret, frame = self.cap.read()
+
+            if not ret:
+                break
+
+            curr_msec = self.cap.get(cv2.CAP_PROP_POS_MSEC)
+            curr_is_del = delimiter.check(frame)
+
+            if not prev_is_del and not curr_is_del:
+                continue
+
+            # delimiter started
+            if not prev_is_del and curr_is_del:
+                period[1] = prev_msec
+
+                if period[0] < period[1]:
+                    timeline.append(period)
+
+                    print(timeline)
+
+            # delimiter ended
+            if prev_is_del and not curr_is_del:
+                period[0] = curr_msec
+
+            print(period)
+
+            # debug
+            cv2.imshow('frame', frame)
+            cv2.waitKey(10)
+
+            prev_msec = curr_msec
+            prev_is_del = curr_is_del
+
+        return timeline

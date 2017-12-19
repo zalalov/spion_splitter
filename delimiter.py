@@ -34,4 +34,4 @@ class Delimiter:
         :param image: image to compare
         :return: true/false if image is a delimiter
         """
-        return get_hist_corr(self.image, image) <= self.THRESHOLD
+        return get_hist_corr(self.image, image) >= self.THRESHOLD
