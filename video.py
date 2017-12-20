@@ -11,6 +11,7 @@ class SpionRecord:
     Le Zap De Spion video handler (USE ONLY WITH CONTEXT MANAGER)
     """
     OUTPUT_DIR = './output/'
+    CUT_DELTA = 0.3
 
     def __init__(self, video_path):
         """
@@ -141,15 +142,18 @@ class SpionRecord:
         :param duration: duration in seconds
         :param output_name: name of output file
         """
+        cut_begin = (ms_start / 1000) + self.CUT_DELTA
+        cut_end = (duration / 1000) - self.CUT_DELTA
+
         subprocess.call([
             'ffmpeg',
             '-i',
             self.path,
             '-ss',
-            str(ms_start / 1000),
+            str(cut_begin),
             '-strict',
             '-2',
             '-t',
-            str(duration / 1000),
+            str(cut_end),
             output_path
         ])

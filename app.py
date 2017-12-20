@@ -2,7 +2,7 @@ import cv2
 from delimiter import Delimiter
 from video import SpionRecord
 
-VIDEO_PATH = 'cutted.mp4'
+VIDEO_PATH = '247.mp4'
 DELIMITER_PATH = 'frames/delimiters/old.png'
 
 d = Delimiter(DELIMITER_PATH)
