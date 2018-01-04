@@ -145,6 +145,9 @@ class SpionRecord:
         cut_begin = (ms_start / 1000) + self.CUT_DELTA
         cut_end = (duration / 1000) - self.CUT_DELTA
 
+        if cut_end < 0:
+            return
+
         subprocess.call([
             'ffmpeg',
             '-i',
